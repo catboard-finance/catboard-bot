@@ -29,7 +29,12 @@ wrangler kv:namespace create MAINNETBEATA_PYTH_PRICES --preview
 ## Develop
 
 ```bash
+# Develop at local
 wrangler dev
+
+# Tunnel
+cloudflared tunnel login
+cloudflared tunnel --url localhost:8787
 ```
 
 ### Preview and Watch

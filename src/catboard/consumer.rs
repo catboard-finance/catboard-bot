@@ -49,7 +49,7 @@ async fn get_kv_text(kv: &WorkersKv, key: &str) -> String {
 
 #[allow(dead_code)]
 pub(crate) fn get_supported_symbols() -> Vec<&'static str> {
-    // TODO: read from env
+    // TODO: read from kv
     let text = "Crypto.BTC/USD,Crypto.ETH/USD,Crypto.SOL/USD";
     let texts: Vec<&str> = text.split(",").collect();
     let pairs: Vec<&str> = texts.iter().flat_map(|p| p.split(".").nth(1)).collect();

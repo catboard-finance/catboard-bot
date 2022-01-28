@@ -54,19 +54,14 @@ impl Context {
     }
 
     async fn handle_api_payload(&self, kv: &WorkersKv, fn_name: &str) -> Result<String, Error> {
+        // TODO : test this
+        let symbols = kv.get_text("SYMBOLS").await.unwrap().unwrap();
+        let symbols = symbols.split(",").collect();
+
         let response = match fn_name {
-            "sync_products" => {
-                let symbols = self.env("SYMBOLS")?;
-                let symbols = symbols.split(",").collect();
-                fetch_pyth_product_and_record(kv, &Cluster::Devnet, symbols).await
-            }
-            "sync_prices" => {
-                let symbols = self.env("SYMBOLS")?;
-                let symbols = symbols.split(",").collect();
-                fetch_pyth_prices_and_record(kv, &Cluster::Devnet, symbols).await
-            }
-            _ => todo!(),
-            // _ => Ok(hello().await).map_err(Error::JsonFailed),
+            "sync_products" => fetch_pyth_product_and_record(kv, &Cluster::Devnet, symbols).await,
+            "sync_prices" => fetch_pyth_prices_and_record(kv, &Cluster::Devnet, symbols).await,
+            _ => todo!(), // _ => Ok(hello().await).map_err(Error::JsonFailed),
         };
 
         serde_json::to_string(&response.unwrap()).map_err(Error::JsonFailed)

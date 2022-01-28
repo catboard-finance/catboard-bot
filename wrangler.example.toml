@@ -11,4 +11,3 @@ kv_namespaces = [
 
 [vars]
 PUBLIC_KEY = "..."
-SYMBOLS = "Crypto.BTC/USD,Crypto.ETH/USD,Crypto.SOL/USD"
