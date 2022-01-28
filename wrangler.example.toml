@@ -1,0 +1,14 @@
+name = "catboard-discord-hook"
+type = "rust"
+workers_dev = true
+route = ""
+zone_id = "..."
+account_id = "..."
+compatibility_date = "2022-01-08"
+kv_namespaces = [ 
+ { binding = "DEVNET_PYTH_PRODUCTS", id = "...", preview_id = "..." }
+]
+
+[vars]
+PUBLIC_KEY = "..."
+SYMBOLS = "Crypto.BTC/USD,Crypto.ETH/USD,Crypto.SOL/USD"
