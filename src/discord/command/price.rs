@@ -15,7 +15,7 @@ pub(crate) async fn price(kv: &WorkersKv, symbol: &str) -> InteractionResponse {
     // Guard not support symbol
     match price_account.as_str() {
         "" => {
-            let content = format!("Sorry 😱, {} is not support at the moment.", symbol);
+            let content = format!("😱 Sorry! `{}` is not support at the moment.", symbol);
             return InteractionResponse {
                 ty: InteractionResponseType::ChannelMessageWithSource,
                 data: Some(InteractionApplicationCommandCallbackData {
