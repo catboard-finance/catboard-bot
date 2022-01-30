@@ -2,6 +2,8 @@
 
 Bot for feed things to serve user input, mostly via Discord slash command.
 
+![catboard](https://user-images.githubusercontent.com/97060/151706752-f20104de-48d2-405b-969b-de921aac5869.png)
+
 ## Init
 
 ```
