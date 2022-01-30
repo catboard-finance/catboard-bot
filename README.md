@@ -15,15 +15,15 @@ wrangler login
 wrangler kv:namespace create DEVNET_PYTH_PRODUCTS
 wrangler kv:namespace create DEVNET_PYTH_PRODUCTS --preview
 
-wrangler kv:namespace create MAINNETBEATA_PYTH_PRODUCTS
-wrangler kv:namespace create MAINNETBEATA_PYTH_PRODUCTS --preview
+wrangler kv:namespace create MAINNETBETA_PYTH_PRODUCTS
+wrangler kv:namespace create MAINNETBETA_PYTH_PRODUCTS --preview
 
 # Price history
 wrangler kv:namespace create DEVNET_PYTH_PRICES
 wrangler kv:namespace create DEVNET_PYTH_PRICES --preview
 
-wrangler kv:namespace create MAINNETBEATA_PYTH_PRICES
-wrangler kv:namespace create MAINNETBEATA_PYTH_PRICES --preview
+wrangler kv:namespace create MAINNETBETA_PYTH_PRICES
+wrangler kv:namespace create MAINNETBETA_PYTH_PRICES --preview
 ```
 
 ## Develop
@@ -56,7 +56,7 @@ wrangler publish
 - [ ] Add indicator text.
 - [ ] Add help+about.
 
-- [ ] Refactor slide.
+- [x] Refactor slide.
 - [ ] Add vdo.
 - [ ] Register hackathon.
 
