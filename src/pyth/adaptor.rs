@@ -1,4 +1,4 @@
-use pyth_client::{load_mapping, load_price, load_product, PriceConf};
+use pyth_client::{load_mapping, load_price, load_product, PriceConf, PriceStatus};
 
 use crate::solana::{
     pubkey::Pubkey,
@@ -29,6 +29,16 @@ where
         len -= 1;
     }
     return val;
+}
+
+#[allow(dead_code)]
+pub(crate) fn get_status(st: &PriceStatus) -> &'static str {
+    match st {
+        PriceStatus::Unknown => "unknown",
+        PriceStatus::Trading => "trading",
+        PriceStatus::Halted => "halted",
+        PriceStatus::Auction => "auction",
+    }
 }
 
 #[allow(dead_code)]
@@ -117,13 +127,26 @@ pub(crate) async fn fetch_pyth_price_by_pubkey(
     cluster: &Cluster,
     px_pkey: &Pubkey,
 ) -> Option<PriceConf> {
-    let mut current_price;
+    let mut maybe_price;
     let mut px_pkey = *px_pkey;
     loop {
         let pd: &[u8] = &get_account_data(&cluster, &px_pkey).await;
         let pa = load_price(&pd).unwrap();
 
-        current_price = pa.get_current_price();
+        maybe_price = pa.get_current_price();
+        let maybe_price = pa.get_current_price();
+        match maybe_price {
+            Some(p) => {
+                println!("price  : {} x 10^{}", p.price, p.expo);
+                println!("conf   : {} x 10^{}", p.conf, p.expo);
+            }
+            None => {
+                println!("price  : unavailable");
+                println!("conf   : unavailable");
+            }
+        }
+
+        println!("status : {}", get_status(&pa.agg.status));
 
         // go to next price account in list
         if pa.next.is_valid() {
@@ -133,7 +156,7 @@ pub(crate) async fn fetch_pyth_price_by_pubkey(
         }
     }
 
-    current_price
+    maybe_price
 }
 
 #[cfg(test)]
@@ -151,13 +174,13 @@ async fn test_fetch_pyth_product_accounts() {
 #[tokio::test]
 async fn test_fetch_pyth_product_account_by_symbol() {
     let cluster = Cluster::Devnet;
-    let symbol = "Crypto.SOL/USD";
+    let symbol = "Crypto.ORCA/USD";
     let product_account = fetch_pyth_product_account_by_symbol(&cluster, symbol).await;
 
     println!("product_account: {:?}", product_account);
     assert_eq!(
         product_account.unwrap().to_string(),
-        "J83w4HKfqxwcq3BEMMkPFSppX3gqekLyLJBexebFVkix".to_string()
+        "A1WttWF7X3Rg6ZRpB2YQUFHCRh1kiXV8sKKLV3S9neJV".to_string()
     );
 }
 
@@ -165,7 +188,7 @@ async fn test_fetch_pyth_product_account_by_symbol() {
 #[tokio::test]
 async fn test_fetch_pyth_price_by_symbol() {
     let cluster = Cluster::Devnet;
-    let symbol = "Crypto.SOL/USD";
+    let symbol = "Crypto.ORCA/USD";
     let current_price = fetch_pyth_price_by_symbol(&cluster, symbol).await;
 
     println!("current_price: {:?}", current_price);
@@ -177,11 +200,11 @@ async fn test_fetch_pyth_price_by_symbol() {
 async fn test_fetch_pyth_price_by_pubkey() {
     let cluster = Cluster::Devnet;
     // Mocked SOL/USD
-    let address = Pubkey::from_str("J83w4HKfqxwcq3BEMMkPFSppX3gqekLyLJBexebFVkix").unwrap();
+    let address = Pubkey::from_str("A1WttWF7X3Rg6ZRpB2YQUFHCRh1kiXV8sKKLV3S9neJV").unwrap();
 
     // Fetch price from pyth
-    let product_account = fetch_pyth_price_by_pubkey(&cluster, &address).await;
+    let price_conf = fetch_pyth_price_by_pubkey(&cluster, &address).await;
 
-    println!("product_account: {:?}", product_account);
-    assert_ne!(product_account, None);
+    println!("price_conf: {:?}", price_conf);
+    assert_ne!(price_conf, None);
 }

@@ -75,19 +75,24 @@ pub(crate) async fn get_formatted_price_from_pyth(
 ) -> String {
     // Fetch price from pyth
     let pubkey = Pubkey::from_str(price_account).unwrap();
-    let price_conf = fetch_pyth_price_by_pubkey(cluster, &pubkey).await.unwrap();
+    let maybe_price_conf = fetch_pyth_price_by_pubkey(cluster, &pubkey).await;
 
-    let price = Money::from_minor(price_conf.price, crypto::SOL);
-    let price_round_up = price.round(2, Round::HalfUp);
-    let conf = (price_conf.conf as f64) / (crypto::SOL.minor_units as f64);
-    let content = format!(
-        "`{}` = `${}` 🎯`±{:.2}`",
-        symbol.to_uppercase(),
-        price_round_up,
-        conf
-    );
-
-    content
+    match maybe_price_conf {
+        Some(price_conf) => {
+            let price = Money::from_minor(price_conf.price, crypto::SOL);
+            let price_round_up = price.round(2, Round::HalfUp);
+            let conf = (price_conf.conf as f64) / (crypto::SOL.minor_units as f64);
+            return format!(
+                "`{}` = `${}` 🎯`±{:.2}`",
+                symbol.to_uppercase(),
+                price_round_up,
+                conf
+            );
+        }
+        None => {
+            return format!("`{}` price is unavailable 🤷‍♂️", symbol.to_uppercase());
+        }
+    }
 }
 
 // static mut STATE: &'static str = "";
