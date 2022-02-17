@@ -30,14 +30,11 @@ fn build_request_json(id: u64, method: &str, params: serde_json::Value) -> serde
     })
 }
 
-pub(crate) async fn get_account_info(
-    cluster: &Cluster,
-    pubkey_string: &String,
-) -> serde_json::Value {
+pub(crate) async fn get_account_info(cluster: &Cluster, pubkey_str: &str) -> serde_json::Value {
     let client = reqwest::Client::new();
     let request_id: u64 = 0;
     let method = "getAccountInfo";
-    let params = json!([pubkey_string,{
+    let params = json!([pubkey_str,{
     "encoding": "base64"
     }]);
     let request_json = build_request_json(request_id, method, params).to_string();
@@ -55,9 +52,21 @@ pub(crate) async fn get_account_info(
 
 pub(crate) async fn get_account_data(cluster: &Cluster, pubkey: &Pubkey) -> Vec<u8> {
     let map_data = get_account_info(&cluster, &pubkey.to_string()).await;
-    let result = map_data["result"]["value"]["data"][0].clone();
+    let result = &map_data["result"]["value"]["data"][0];
     let foo_str = result.as_str().unwrap();
     let b64 = base64::decode(foo_str);
 
     b64.unwrap()
+}
+
+#[cfg(test)]
+#[tokio::test]
+async fn test_get_account_info() {
+    let cluster = Cluster::Devnet;
+    let pubkey = "testbF8AJQDHg7ZqEZejXJTXrjff4516AHD48xTPnBK";
+    let account_info = get_account_info(&cluster, pubkey).await;
+    let result = &account_info["result"];
+
+    println!("result: {:?}", result);
+    assert_ne!(Some(result), None);
 }
