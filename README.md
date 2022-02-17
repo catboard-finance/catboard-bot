@@ -53,14 +53,7 @@ wrangler publish
 
 ## TODO
 
-- [x] Add not support msg.
-- [x] Add more symbols map via firebase.
-- [ ] Add indicator text.
 - [ ] Add help+about.
-
-- [x] Refactor slide.
-- [ ] Add vdo.
-- [ ] Register hackathon.
 
 ## TOHAVE
 
@@ -68,7 +61,7 @@ wrangler publish
 - [ ] Cron to get `SOL`, `ETH`, `BTC` price.
   - [ ] `CHAIN:Crypto.SOL/USD:2022-01-01` = `{low,open,close,average,high}`
 - [ ] Save bulk price to kv.
-- [ ] Integrate `Swap` with https://jup.ag/
-- [ ] Integrate `Stake` with https://marinade.finance/app/staking
-- [ ] Integrate `Lend` with https://francium.io/app/lend
+- [ ] Integrate `Swap` with https://docs.jup.ag/
+- [ ] Integrate `Stake` with https://github.com/lidofinance/lido-js-sdk
+- [ ] Integrate `Lend` with https://docs.francium.io/dev-resource/francium-sdk
 - [ ] Add terms, privacy.
