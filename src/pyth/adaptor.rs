@@ -174,13 +174,13 @@ async fn test_fetch_pyth_product_accounts() {
 #[tokio::test]
 async fn test_fetch_pyth_product_account_by_symbol() {
     let cluster = Cluster::Devnet;
-    let symbol = "Crypto.ORCA/USD";
+    let symbol = "Crypto.SOL/USD";
     let product_account = fetch_pyth_product_account_by_symbol(&cluster, symbol).await;
 
     println!("product_account: {:?}", product_account);
     assert_eq!(
         product_account.unwrap().to_string(),
-        "A1WttWF7X3Rg6ZRpB2YQUFHCRh1kiXV8sKKLV3S9neJV".to_string()
+        "J83w4HKfqxwcq3BEMMkPFSppX3gqekLyLJBexebFVkix".to_string()
     );
 }
 
@@ -188,7 +188,7 @@ async fn test_fetch_pyth_product_account_by_symbol() {
 #[tokio::test]
 async fn test_fetch_pyth_price_by_symbol() {
     let cluster = Cluster::Devnet;
-    let symbol = "Crypto.ORCA/USD";
+    let symbol = "Crypto.SOL/USD";
     let current_price = fetch_pyth_price_by_symbol(&cluster, symbol).await;
 
     println!("current_price: {:?}", current_price);
@@ -200,7 +200,7 @@ async fn test_fetch_pyth_price_by_symbol() {
 async fn test_fetch_pyth_price_by_pubkey() {
     let cluster = Cluster::Devnet;
     // Mocked SOL/USD
-    let address = Pubkey::from_str("A1WttWF7X3Rg6ZRpB2YQUFHCRh1kiXV8sKKLV3S9neJV").unwrap();
+    let address = Pubkey::from_str("J83w4HKfqxwcq3BEMMkPFSppX3gqekLyLJBexebFVkix").unwrap();
 
     // Fetch price from pyth
     let price_conf = fetch_pyth_price_by_pubkey(&cluster, &address).await;
